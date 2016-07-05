@@ -14,6 +14,10 @@ module KeyboardDecoder(
 /* Wires */
 	wire     keyPressed;
 
+/* Important! */
+/* You can only use keyPressed, numPressed, optPressed */
+/* signal with level trigger. NOT WITH a edge trigger! */
+
 /* Instance of Universal Keyboard */
 	Keyboard # (.kbdFreq(50)) keyboard(
 		.clk(clk),
@@ -49,10 +53,10 @@ module KeyboardDecoder(
 			endcase
 		else begin
 			numPressed <= 0;
-			opt        <= 0;
+			opt <= 0;
 			optPressed <= 0;
-			clear      <= 0;
-			submit     <= 0;
+			clear <= 0;
+			submit <= 0;
 		end
 	end
 
