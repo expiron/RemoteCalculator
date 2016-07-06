@@ -110,14 +110,14 @@ module Transmit(
 		else
 			case (state)
 				0: begin txdStart <= 0; data <= 8'b00000000; end
-				1: if(~txdBusy) begin txdStart <= 1; data <= 8'b00110000 + {4'b0000,mem1}; end
-				2: if(~txdBusy) begin txdStart <= 1; data <= 8'b00110000 + {4'b0000,mem2}; end
-				3: if(~txdBusy) begin txdStart <= 1; data <= 8'b00110000 + {4'b0000,mem3}; end
-				4: if(~txdBusy) begin txdStart <= 1; data <= 8'b00110000 + {4'b0000,mem4}; end
-				5: if(~txdBusy) begin txdStart <= 1; data <= 8'b00110000 + {4'b0000,mem5}; end
-				6: if(~txdBusy) begin txdStart <= 1; data <= 8'b00110000 + {4'b0000,mem6}; end
-				7: if(~txdBusy) begin txdStart <= 1; data <= 8'b00110000 + {4'b0000,mem7}; end
-				8: if(~txdBusy) begin txdStart <= 1; data <= 8'b00110000 + {4'b0000,mem8}; end
+				1: if(~txdBusy) begin txdStart <= 1; data <= {4'b0011,mem1}; end
+				2: if(~txdBusy) begin txdStart <= 1; data <= {4'b0011,mem2}; end
+				3: if(~txdBusy) begin txdStart <= 1; data <= {4'b0011,mem3}; end
+				4: if(~txdBusy) begin txdStart <= 1; data <= {4'b0011,mem4}; end
+				5: if(~txdBusy) begin txdStart <= 1; data <= {4'b0011,mem5}; end
+				6: if(~txdBusy) begin txdStart <= 1; data <= {4'b0011,mem6}; end
+				7: if(~txdBusy) begin txdStart <= 1; data <= {4'b0011,mem7}; end
+				8: if(~txdBusy) begin txdStart <= 1; data <= {4'b0011,mem8}; end
 				9: if(~txdBusy) begin txdStart <= 0; data <= 8'b00000000; end
 				default: begin txdStart <= 0; data <= 8'b00000000; end
 			endcase

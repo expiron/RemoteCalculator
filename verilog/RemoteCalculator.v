@@ -18,7 +18,7 @@ module RemoteCalculator(
 	wire tick;
 	wire [7:0]data;
 	wire rxdDataReady;
-	
+	wire[3:0] n;
 	wire[3:0] num;
 	wire[3:0] num1;
 	wire[3:0] num2;
@@ -41,13 +41,13 @@ module RemoteCalculator(
 		.submit(submit)
 	);
 
-	Transmit trans(
+	ReceiveTransmit recivTrans(
 		.clk(clk),
 		.reset(reset),
-		.num(num),
-		.numPressed(numPressed),
+		.rxd(rxd),
 		.clear(clear),
 		.submit(submit),
+		.n(n),
 		.num1(num1),
 		.num2(num2),
 		.num3(num3),
@@ -67,9 +67,24 @@ module RemoteCalculator(
 //		.num4(num4)
 //	);
 
+//	Transmit trans(
+//		.clk(clk),
+//		.reset(reset),
+//		.num(num),
+//		.numPressed(numPressed),
+//		.clear(clear),
+//		.submit(submit),
+//		.num1(num1),
+//		.num2(num2),
+//		.num3(num3),
+//		.num4(num4),
+//		.txd(txd)
+//	);
+
 	DigitalLED # (.ledFreq(250)) digitalLED(
 		.clk(clk),
 		.reset(reset),
+		.n(n),
 		.num1(num1),
 		.num2(num2),
 		.num3(num3),
@@ -77,6 +92,18 @@ module RemoteCalculator(
 		.com(com),
 		.seg(seg)
 	);
+
+//	DigitalLED # (.ledFreq(250)) digitalLED(
+//		.clk(clk),
+//		.reset(reset),
+//		.n(n),
+//		.num1(1),
+//		.num2(2),
+//		.num3(3),
+//		.num4(4),
+//		.com(com),
+//		.seg(seg)
+//	);
 
 //	always @ (posedge clk or negedge reset) begin
 //		if (!reset) begin

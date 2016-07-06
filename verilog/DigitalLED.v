@@ -1,6 +1,7 @@
 module DigitalLED (
 	input            clk,
 	input            reset,
+	input      [3:0] n,
 	input      [3:0] num1,
 	input      [3:0] num2,
 	input      [3:0] num3,
@@ -25,13 +26,16 @@ module DigitalLED (
 			S0:	state = S1;
 			S1:	state = S2;
 			S2:	state = S3;
-			S3:	state = S0;
+			S3:	if (n == 1) state <= S3; else if (n == 2) state <= S2; else if (n == 3) state <= S1; else state <= S0;
 		endcase
 	end
 
 /* Data&Seg Selector */
 	always @ (posedge ledClk or negedge reset) begin
 		if (!reset) begin
+			com <= 4'b0000;
+		end
+		else if (n == 0) begin
 			com <= 4'b0000;
 		end
 		else begin
