@@ -41,31 +41,31 @@ module RemoteCalculator(
 		.submit(submit)
 	);
 
-//	Transmit trans(
-//		.clk(clk),
-//		.reset(reset),
-//		.num(num),
-//		.numPressed(numPressed),
-//		.clear(clear),
-//		.submit(submit),
-//		.num1(num1),
-//		.num2(num2),
-//		.num3(num3),
-//		.num4(num4),
-//		.txd(txd)
-//	);
-
-	Receive reciv(
+	Transmit trans(
 		.clk(clk),
 		.reset(reset),
-		.rxd(rxd),
+		.num(num),
+		.numPressed(numPressed),
 		.clear(clear),
 		.submit(submit),
 		.num1(num1),
 		.num2(num2),
 		.num3(num3),
-		.num4(num4)
+		.num4(num4),
+		.txd(txd)
 	);
+
+//	Receive reciv(
+//		.clk(clk),
+//		.reset(reset),
+//		.rxd(rxd),
+//		.clear(clear),
+//		.submit(submit),
+//		.num1(num1),
+//		.num2(num2),
+//		.num3(num3),
+//		.num4(num4)
+//	);
 
 	DigitalLED # (.ledFreq(250)) digitalLED(
 		.clk(clk),
