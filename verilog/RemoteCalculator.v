@@ -41,20 +41,7 @@ module RemoteCalculator(
 		.submit(submit)
 	);
 
-	Transmit trans(
-		.clk(clk),
-		.reset(reset),
-		.num(num),
-		.numPressed(numPressed),
-		.clear(clear),
-		.submit(submit),
-		.num1(num1),
-		.num2(num2),
-		.num3(num3),
-		.num4(num4),
-		.txd(txd)
-	);
-//	InputBuffer inputBuff(
+//	Transmit trans(
 //		.clk(clk),
 //		.reset(reset),
 //		.num(num),
@@ -64,37 +51,21 @@ module RemoteCalculator(
 //		.num1(num1),
 //		.num2(num2),
 //		.num3(num3),
-//		.num4(num4)
-//	);
-//	always @ (numPressed) begin
-//		if (numPressed) begin
-//			num1 <= num;
-//			num2 <= num;
-//			num3 <= num;
-//			num4 <= num;
-//		end
-//		else begin
-//			num1 <= 0;
-//			num2 <= 0;
-//			num3 <= 0;
-//			num4 <= 0;
-//		end
-//	end
-//	TransmitData trans(
-//		.clk(clk),
-//		.reset(reset),
-//		.txdStart(tick),
-//		.data(8'b01000001),
+//		.num4(num4),
 //		.txd(txd)
 //	);
 
-//	ReceiveData reciv(
-//		.clk(clk),
-//		.reset(reset),
-//		.rxd(rxd),
-//		.data(data),
-//		.rxdDataReady(rxdDataReady)
-//	);
+	Receive reciv(
+		.clk(clk),
+		.reset(reset),
+		.rxd(rxd),
+		.clear(clear),
+		.submit(submit),
+		.num1(num1),
+		.num2(num2),
+		.num3(num3),
+		.num4(num4)
+	);
 
 	DigitalLED # (.ledFreq(250)) digitalLED(
 		.clk(clk),
