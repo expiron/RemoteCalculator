@@ -15,7 +15,6 @@ module RemoteCalculator(
 //	reg [3:0] num2;
 //	reg [3:0] num3;
 //	reg [3:0] num4;
-	wire tick;
 	wire [7:0]data;
 	wire rxdDataReady;
 	wire[3:0] n;
@@ -25,7 +24,6 @@ module RemoteCalculator(
 	wire[3:0] num3;
 	wire[3:0] num4;
 	wire[2:0] opt;
-	wire      keyPressed;
 	wire      numPressed;
 	wire      optPressed;
 	wire      submit;
@@ -37,14 +35,20 @@ module RemoteCalculator(
 		.col(col),
 		.num(num),
 		.numPressed(numPressed),
+		.opt(opt),
+		.optPressed(optPressed),
 		.clear(clear),
 		.submit(submit)
 	);
 
-	ReceiveTransmit recivTrans(
+	Calculator calc(
 		.clk(clk),
 		.reset(reset),
 		.rxd(rxd),
+		.num(num),
+		.numPressed(numPressed),
+		.opt(opt),
+		.optPressed(optPressed),
 		.clear(clear),
 		.submit(submit),
 		.n(n),
@@ -52,8 +56,24 @@ module RemoteCalculator(
 		.num2(num2),
 		.num3(num3),
 		.num4(num4),
+		.sign(sign),
+		.clcZero(clcZero),
 		.txd(txd)
 	);
+
+//	ReceiveTransmit recivTrans(
+//		.clk(clk),
+//		.reset(reset),
+//		.rxd(rxd),
+//		.clear(clear),
+//		.submit(submit),
+//		.n(n),
+//		.num1(num1),
+//		.num2(num2),
+//		.num3(num3),
+//		.num4(num4),
+//		.txd(txd)
+//	);
 
 //	Receive reciv(
 //		.clk(clk),
