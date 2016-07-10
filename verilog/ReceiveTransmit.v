@@ -40,6 +40,9 @@ module ReceiveTransmit(
 	wire [7:0] rxdData;
 	wire rxdDataReady;
 	wire showClk;
+	wire      rxdDataCheck;
+
+	assign rxdDataCheck = ((rxdData[7:4] == 4'b0011) & (rxdData[3:0] < 10));
 
 	FrequencyDivider # (.divFreq(2)) divider(
 		.clk(clk),
@@ -79,7 +82,7 @@ module ReceiveTransmit(
 		end
 		else if (complete)
 			cnt <= 0;
-		else if (rxdDataReady & ~readyDelay) begin
+		else if (rxdDataReady & rxdDataCheck & ~readyDelay) begin
 			mem1 <= (mem2 & ((cnt < 7) ? 4'b0000 : 4'b1111));
 			mem2 <= (mem3 & ((cnt < 6) ? 4'b0000 : 4'b1111));
 			mem3 <= (mem4 & ((cnt < 5) ? 4'b0000 : 4'b1111));

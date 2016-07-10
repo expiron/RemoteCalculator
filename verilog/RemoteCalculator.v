@@ -23,7 +23,7 @@ module RemoteCalculator(
 	wire[3:0] num2;
 	wire[3:0] num3;
 	wire[3:0] num4;
-	wire[2:0] opt;
+	wire[1:0] opt;
 	wire      numPressed;
 	wire      optPressed;
 	wire      submit;

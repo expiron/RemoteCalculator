@@ -23,20 +23,17 @@ module Calculator(
 	reg [1:0] operation;
 	reg [3:0] b;
 	reg [7:0] ans;
-	reg       complete;
-	reg [3:0] cnt;
-	reg       readyDelay;
 
 	reg       txdStart;
 	reg [7:0] txdData;
-	wire [7:0] rxdData;
-	wire rxdDataReady;
-	wire showClk;
-	
+	wire[7:0] rxdData;
+	wire      rxdDataReady;
+	wire      rxdDataCheck;
 
 	assign n = 4'b0100;
 	assign num1 = a;
 	assign num2 = b;
+	assign rxdDataCheck = ((rxdData[7:4] == 4'b0011) & (rxdData[3:0] < 10));
 
 	ReceiveData receiveData(
 		.clk(clk),
@@ -61,7 +58,7 @@ module Calculator(
 		end
 		else
 			case (state)
-				0: if (rxdDataReady) state <= 1;// else state <= 0;
+				0: if (rxdDataReady & rxdDataCheck) state <= 1;// else state <= 0;
 				1: if (optPressed)   state <= 2;// else state <= 1;
 				2: if (numPressed)   state <= 3; else if (clear) state <= 1;// else state <= 2;
 				3: if (submit)       state <= 4; else if (clear) state <= 1;// else state <= 3;
@@ -82,16 +79,15 @@ module Calculator(
 			num4 <= 0;
 			sign <= 0;
 			clcZero <= 0;
-			cnt <= 0;
 		end
 		else if (clear) begin
 			operation <= 0;
 			b <= 0;
 		end
 		else case (state)
-			0: if (rxdDataReady) a <= rxdData[3:0];// else a <= 0;
+			0: if (rxdDataReady & rxdDataCheck) a <= rxdData[3:0];// else a <= 0;
 			1: begin
-				if (rxdDataReady) a <= rxdData[3:0];
+				if (rxdDataReady & rxdDataCheck) a <= rxdData[3:0];
 				if (optPressed) operation <= opt; else operation <= 0;
 				sign <= 0;
 				clcZero <= 0;
@@ -108,7 +104,6 @@ module Calculator(
 				if (operation == 1) begin
 					num3 <= ans / 10;
 					num4 <= ans % 10;
-					cnt <= (num3 == 0 ? 1 : 2);
 					sign <= 0;
 					clcZero <= 0;
 				end
@@ -116,14 +111,12 @@ module Calculator(
 					if (a >= b) begin
 						num3 <= 0;
 						num4 <= a - b;
-						cnt <= 1;
 						sign <= 0;
 						clcZero <= ((a - b) == 0 ? 1 : 0);
 					end
 					else begin
 						num3 <= 14;
 						num4 <= 14;
-						cnt  <= 2;
 						sign <= 1;
 						clcZero <= 0;
 					end
@@ -131,7 +124,6 @@ module Calculator(
 				else begin
 					num3 <= 14;
 					num4 <= 14;
-					cnt  <= 2;
 					sign <= 0;
 					clcZero <= 0;
 				end
@@ -147,7 +139,7 @@ module Calculator(
 		end
 		else case (state)
 			0, 1, 2, 3, 4:   begin txdStart <= 0; txdData <= 8'b00000000; end
-			5: if (~txdBusy) begin txdStart <= (cnt >= 2 ? 1 : 0); txdData <= (num3 >= 10 ? 8'b01000101 : {4'b0011,num3}); end
+			5: if (~txdBusy) begin txdStart <= (num3 == 0 ? 0 : 1); txdData <= (num3 >= 10 ? 8'b01000101 : {4'b0011,num3}); end
 			6: if (~txdBusy) begin txdStart <= 1; txdData <= (num4 >= 10 ? 8'b01000101 : {4'b0011,num4}); end
 			7: if (~txdBusy) begin txdStart <= 0; txdData <= 8'b00000000; end
 			default:         begin txdStart <= 0; txdData <= 8'b00000000; end
